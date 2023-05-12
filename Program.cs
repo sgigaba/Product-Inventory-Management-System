@@ -1,7 +1,13 @@
 using Product_Inventory_Management_System;
 
 using Microsoft.EntityFrameworkCore;
+
 using Product_Inventory_Management_System.Services;
+
+using FluentValidation;
+
+using Product_Inventory_Management_System.Models;
+using Product_Inventory_Management_System.Validators;
 
 internal class Program
 {
@@ -14,6 +20,7 @@ internal class Program
 
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddScoped<ProductService>();
+        builder.Services.AddScoped<IValidator<Product>, ProductValidator>();
 
         // Add services to the container.
         builder.Services

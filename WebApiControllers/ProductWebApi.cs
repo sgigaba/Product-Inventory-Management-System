@@ -3,20 +3,22 @@
     using DevExtreme.AspNet.Data;
     using DevExtreme.AspNet.Mvc;
 
+    using FluentValidation;
+    using FluentValidation.Results;
+
     using Microsoft.AspNetCore.Mvc;
 
-    using Newtonsoft.Json;
-
-    using Product_Inventory_Management_System.Models;
     using Product_Inventory_Management_System.Services;
 
     public class ProductWebApi : Controller
     {
         private readonly ProductService productService;
+        private readonly IValidator validator;
 
-        public ProductWebApi(ProductService productService)
+        public ProductWebApi(ProductService productService, IValidator validator)
         {
             this.productService = productService;
+            this.validator = validator;
         }
 
         [HttpGet]
@@ -31,6 +33,8 @@
         public IActionResult Create(string values)
         {
             var model = productService.Add(values);
+
+            ValidationResult result = this.validator.Validate(model);
 
             return Ok(model);
         }
