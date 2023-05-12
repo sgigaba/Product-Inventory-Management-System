@@ -4,7 +4,11 @@
 
 @(Html.DevExtreme().DataGrid<Product>()
     .ShowBorders(true)
-    .DataSource(d => d.Mvc().Controller("ProductWebApi").LoadAction("Get").Key("Id"))
+    .DataSource(d => d.Mvc().Controller("ProductWebApi")
+    .LoadAction("Get")
+    .InsertAction("Create")
+    .DeleteAction("Delete")
+    .Key("Id"))
     .Columns(columns => {
         columns.AddFor(m => m.Name);
         columns.AddFor(m => m.Price);
@@ -24,5 +28,12 @@
         .GroupItems(groupItems => {
             groupItems.Add().SummaryType(SummaryType.Count);
         })
+    )
+     .Editing(_ => _.Mode(GridEditMode.Form)
+        .UseIcons(true)
+        .Texts(_ => _.AddRow("Add Product"))
+        .AllowAdding(true)
+        .AllowDeleting(true)
+        .RefreshMode(GridEditRefreshMode.Reshape)
     )
 )
