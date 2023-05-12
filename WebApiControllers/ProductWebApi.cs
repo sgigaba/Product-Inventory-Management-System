@@ -8,32 +8,28 @@
     using Newtonsoft.Json;
 
     using Product_Inventory_Management_System.Models;
+    using Product_Inventory_Management_System.Services;
 
     public class ProductWebApi : Controller
     {
-        private readonly ApplicationDbContext context;
+        private readonly ProductService productService;
 
-        public ProductWebApi(ApplicationDbContext context)
+        public ProductWebApi(ProductService productService)
         {
-            this.context = context;
+            this.productService = productService;
         }
 
         [HttpGet]
         public object Get(DataSourceLoadOptions loadOptions)
         {
-            var products = context.Products.ToList();
-
+            var products = productService.Get();
             return DataSourceLoader.Load(products, loadOptions);
         }
 
+        [HttpPost]
         public IActionResult Create(string values)
         {
-            var model = new Product();
-                
-            JsonConvert.PopulateObject(values, model);
-
-            context.Products.Add(model);
-            context.SaveChanges();
+            var model = productService.Add(values);
 
             return Ok(model);
         }

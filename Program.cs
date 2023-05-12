@@ -1,6 +1,7 @@
 using Product_Inventory_Management_System;
 
 using Microsoft.EntityFrameworkCore;
+using Product_Inventory_Management_System.Services;
 
 internal class Program
 {
@@ -12,6 +13,7 @@ internal class Program
         var configuration = configBuilder.Build();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddScoped<ProductService>();
 
         // Add services to the container.
         builder.Services
