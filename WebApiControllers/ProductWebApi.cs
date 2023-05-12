@@ -4,18 +4,23 @@
     using DevExtreme.AspNet.Mvc;
 
     using FluentValidation;
+    using FluentValidation.AspNetCore;
     using FluentValidation.Results;
 
     using Microsoft.AspNetCore.Mvc;
-
+    using Newtonsoft.Json;
+    using Product_Inventory_Management_System.Models;
     using Product_Inventory_Management_System.Services;
+    using Product_Inventory_Management_System.Validators;
+
+    using System.ComponentModel.DataAnnotations;
 
     public class ProductWebApi : Controller
     {
         private readonly ProductService productService;
-        private readonly IValidator validator;
+        private readonly IValidator<Product> validator;
 
-        public ProductWebApi(ProductService productService, IValidator validator)
+        public ProductWebApi(ProductService productService, IValidator<Product> validator)
         {
             this.productService = productService;
             this.validator = validator;
@@ -32,9 +37,20 @@
         [HttpPost]
         public IActionResult Create(string values)
         {
-            var model = productService.Add(values);
+            var model = new Product();
 
-            ValidationResult result = this.validator.Validate(model);
+            JsonConvert.PopulateObject(values, model);
+
+            var result = this.validator.Validate(model, _ => _.IncludeRuleSets("Create"));
+
+            if (!result.IsValid)
+            {
+                result.AddToModelState(this.ModelState);
+                return this.BadRequest(this.ModelState.ToFullErrorString());
+            }
+
+            model = productService.Add(values);
+
 
             return Ok(model);
         }

@@ -8,17 +8,20 @@
     {
         public ProductValidator() 
         {
-            this.RuleFor(_ => _.Name)
+            this.RuleSet("Create", () =>
+            {
+                this.RuleFor(_ => _.Name)
                 .NotEmpty();
 
-            this.RuleFor(_ => _.Description)
-                .NotEmpty();
+                this.RuleFor(_ => _.Description)
+                    .NotEmpty();
 
-            this.RuleFor(_ => _.Price)
-                .GreaterThanOrEqualTo(0);
-            
-            this.RuleFor(_ => _.Quantity)
-                .GreaterThanOrEqualTo(0);
+                this.RuleFor(_ => _.Price)
+                    .GreaterThanOrEqualTo(0);
+
+                this.RuleFor(_ => _.Quantity)
+                    .GreaterThanOrEqualTo(0);
+            });
         }
     }
 }
