@@ -1,41 +1,58 @@
 @using Product_Inventory_Management_System.Models
 
-<h2>Home</h2>
+<h1 class="text-secondary"> Fakealot product inventory system </h1>
 
-@(Html.DevExtreme().DataGrid<Product>()
+<p> Ensure your inventory list is up to date as your Takealot shop details will be populated from these values! </p>
+<br> 
+
+@(
+    Html.DevExtreme().DataGrid<Product>()
     .ShowBorders(true)
-    .DataSource(d => d.Mvc().Controller("ProductWebApi")
-    .LoadAction("Get")
-    .InsertAction("Create")
-    .DeleteAction("Delete")
-    .Key("Id"))
-    .Columns(columns => {
-        columns.AddFor(m => m.Id)
-            .AllowEditing(false);
-        columns.AddFor(m => m.Name);
-        columns.AddFor(m => m.Price);
-        columns.AddFor(m => m.Description);
-        columns.AddFor(m => m.Quantity);
-    })
-    .Paging(p => p.PageSize(10))
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .GroupPanel(p => p.Visible(true))
-    .Grouping(g => g.AutoExpandAll(false))
-    .RemoteOperations(true)
-    .Summary(s => s
-        .TotalItems(totalItems => {
-            totalItems.AddFor(m => m.Name).SummaryType(SummaryType.Count);
+        .DataSource(d => d.Mvc()
+        .Controller("ProductWebApi")
+        .LoadAction("Get")
+        .InsertAction("Create")
+        .DeleteAction("Delete")
+        .Key("Id"))
+        .Height(1100)
+        .WordWrapEnabled(true)
+        .Columns(columns => {
+            columns.AddFor(m => m.Id)
+                .AllowEditing(false);
+            columns.AddFor(m => m.Name);
+            columns.AddFor(m => m.Price);
+            columns.AddFor(m => m.Description);
+            columns.AddFor(m => m.Quantity);
+            columns.AddFor(m => m.Category)
+                .Lookup(_ => _
+                    .DataSource(_ => _.Mvc()
+                        .Controller("ProductWebApi")
+                        .LoadAction("GetProductCategories")
+                        .Key("Id"))
+                        .ValueExpr("Id")
+                        .DisplayExpr("Category")
+                );
+            columns.AddFor(m => m.Status);
         })
-        .GroupItems(groupItems => {
-            groupItems.Add().SummaryType(SummaryType.Count);
-        })
-    )
-     .Editing(_ => _.Mode(GridEditMode.Form)
-        .UseIcons(true)
-        .Texts(_ => _.AddRow("Add Product"))
-        .AllowAdding(true)
-        .AllowDeleting(true)
-        .RefreshMode(GridEditRefreshMode.Reshape)
-    )
+        .Paging(p => p.PageSize(10))
+        .FilterRow(f => f.Visible(true))
+        .HeaderFilter(f => f.Visible(true))
+        .GroupPanel(p => p.Visible(true))
+        .Grouping(g => g.AutoExpandAll(false))
+        .RemoteOperations(true)
+        .Summary(s => s
+            .TotalItems(totalItems => {
+                totalItems.AddFor(m => m.Name).SummaryType(SummaryType.Count);
+            })
+            .GroupItems(groupItems => {
+                groupItems.Add().SummaryType(SummaryType.Count);
+            })
+        )
+         .Editing(_ => _.Mode(GridEditMode.Form)
+            .UseIcons(true)
+            .Texts(_ => _.AddRow("Add Product"))
+            .AllowAdding(true)
+            .AllowDeleting(true)
+            .RefreshMode(GridEditRefreshMode.Reshape)
+        )
 )

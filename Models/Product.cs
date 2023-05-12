@@ -1,4 +1,7 @@
-﻿namespace Product_Inventory_Management_System.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Product_Inventory_Management_System.Models
 {
     public class Product
     {
@@ -11,5 +14,12 @@
         public double Price { get; set; }
 
         public int Quantity { get; set; }
+
+        public int? Category { get; set; }
+
+        public string? Status { get; set; }
+
+        [NotMapped]
+        public List<ProductCategories> CategoryList { get; set; }
     }
 }

@@ -63,5 +63,41 @@
 
             return Ok();
         }
+
+        [HttpGet]
+        public IActionResult GetProductCategories(DataSourceLoadOptions loadOptions)
+        {
+            var babyAndToddler = new ProductCategories()
+            {
+                Id = 1,
+                Category = "Baby & Toddler"
+            };
+
+            var beauty = new ProductCategories()
+            {
+                Id = 2,
+                Category = "Beauty"
+            };
+
+            var books = new ProductCategories()
+            {
+                Id = 3,
+                Category = "Books"
+            };
+
+            var computersAndElectronics = new ProductCategories()
+            {
+                Id = 3,
+                Category = "Computers & Electronics"
+            };
+
+            List<ProductCategories> categories = new List<ProductCategories>();
+            categories.Add(babyAndToddler);
+            categories.Add(beauty);
+            categories.Add(books);
+            categories.Add(computersAndElectronics);
+
+            return this.Json(DataSourceLoader.Load(categories, loadOptions));
+        }
     }
 }

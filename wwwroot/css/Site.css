@@ -1,2 +1,7 @@
 body {
 }
+
+.main-form-layout #leftNavBar .dx-nav-item {
+    float: left;
+    height: 25px;
+}  
