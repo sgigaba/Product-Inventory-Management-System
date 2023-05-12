@@ -29,5 +29,13 @@ namespace Product_Inventory_Management_System.Services
 
             return products;
         }
+
+        public void Delete(int key) 
+        {
+            var model = this.context.Products.Find(key);
+
+            this.context.Remove(model);
+            this.context.SaveChanges();
+        }
     }
 }

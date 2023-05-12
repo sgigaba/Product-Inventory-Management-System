@@ -10,6 +10,8 @@
     .DeleteAction("Delete")
     .Key("Id"))
     .Columns(columns => {
+        columns.AddFor(m => m.Id)
+            .AllowEditing(false);
         columns.AddFor(m => m.Name);
         columns.AddFor(m => m.Price);
         columns.AddFor(m => m.Description);

@@ -23,6 +23,7 @@
         public object Get(DataSourceLoadOptions loadOptions)
         {
             var products = productService.Get();
+
             return DataSourceLoader.Load(products, loadOptions);
         }
 
@@ -32,6 +33,15 @@
             var model = productService.Add(values);
 
             return Ok(model);
+        }
+
+        [HttpDelete]
+
+        public IActionResult Delete(int key) 
+        {
+            this.productService.Delete(key);
+
+            return Ok();
         }
     }
 }
